@@ -1,0 +1,16 @@
+#!/bin/sh
+# Copyright 2020 (c) Ed Wildgoose - Nippy Networks UK LLP
+
+# SWAP SIMs
+# Swapping SIMs needs some care. 
+# Some modems need powering down. Others may need a full reset. 
+# May depend on their current state
+
+state=$1
+swap_device=$2
+cdc_device=$3
+
+qmicli -p -d /dev/cdc-wdm0 --uim-sim-power-off=1
+echo $state > /sys/class/gpio/simswap/value
+sleep 1
+qmicli -p -d /dev/cdc-wdm0 --uim-sim-power-on=1

@@ -1,0 +1,91 @@
+#!/bin/sh        
+# Copyright 2020 (c) Ed Wildgoose - Nippy Networks UK LLP
+
+# Play some beeps. Understands note names!
+# Limited to integer values for compatibility with busybox
+
+export B6=1976
+export A6s=1865
+export A6=1760
+export G6s=1661
+export G6=1568
+export F6s=1480
+export F6=1397
+export E6=1319
+export D6s=1245
+export D6=1175
+export C6s=1109
+export C6=1047
+export B5=988
+export A5s=932
+export A5=880
+export G5s=831
+export G5=784
+export F5s=740
+export F5=698
+export E5=659
+export D5s=622
+export D5=587
+export C5s=554
+export C5=523
+export B4=494
+export A4s=466
+export A4=440
+export G4s=415
+export G4=392
+export F4s=370
+export F4=349
+export E4=330
+export D4s=311
+export D4=294
+export C4s=277
+export C4=262
+export B3=247
+export A3s=233
+export A3=220
+export G3s=208
+export G3=196
+export F3s=185
+export F3=175
+export E3=165
+export D3s=156
+export D3=147
+export C3s=139
+export C3=131
+export B2=123
+export A2s=117
+export A2=110
+export G2s=104
+export G2=98
+export F2s=92
+export F2=87
+export E2=82
+export D2s=78
+export D2=73
+export C2s=69
+export C2=65
+
+export WHOLE=1600
+export HALF=800
+export QUARTER=400
+export EIGHTH=200
+export SIXTEENTH=100
+
+#beep -f $A4 -l $EIGHTH -n \
+# -f $G4 -l $QUARTER -n \
+# -f $G4 -l $QUARTER
+#echo $*
+
+cmd="/usr/bin/beep"
+for arg; do
+    if [ ${arg:0:1} == "-" ]; then
+        cmd="${cmd} ${arg}"
+    else
+        # Add a $
+        cmd="${cmd} \$${arg}"
+    fi
+done
+
+#echo $cmd
+$(eval $cmd)
+
