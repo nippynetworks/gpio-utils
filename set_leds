@@ -1,29 +1,59 @@
 #!/bin/sh
-# Copyright 2020 (c) Ed Wildgoose - Nippy Networks UK LLP
+# Copyright 2020-2021 (c) Ed Wildgoose - Nippy Networks UK LLP
 
 # # Flash an LED
-#  Supports PCEngines Alix / APU
+#  Supports PCEngines Alix / APU / Skylink
 #
-# $1 = LED (1-3)
+# $1 = LED (1-3, etc)
 # $2 = Flash State (off|on|heartbeat|flash)
 # $3 = delay_on | Flash Speed (fast|medium|slow|occult)
 # $4 = delay_off
-
-# Find our LEDs
-BASE=$(ls -1d /sys/class/leds/apu*:green:led1 /sys/class/leds/alix:1 2> /dev/null |head -n 1)
-if [ -n "${BASE}" ]; then
-	BASE="${BASE%1}"
-else
-	echo "Unable to locate LEDs"
-	exit 1
-fi
 
 #
 # Show program usage
 show_usage() {
 	echo "Usage: $0 LED state [speed | delay_on delay_off]"
-	echo "Usage: $0 strobe_all type"
+	echo "Usage: $0 strobe_all (simple|heartbeat1|heartbeat2)"
+	echo "	\$1 = LED (1-3, etc)"
+	echo "	\$2 = Flash State (off|on|heartbeat|flash)"
+	echo "	\$3 = delay_on | Flash Speed (fast|medium|slow|occult)"
+	echo "	\$4 = delay_off"
+
 	exit 1
+}
+
+#
+# Find our LEDs
+led_path() {
+	led=$1
+
+	local pce_base=$(ls -1d /sys/class/leds/apu*:green:led1 /sys/class/leds/alix:1 2> /dev/null |head -n 1)
+	local base
+	if [ -n "${pcebase}" ]; then
+		base="${pce_base%1}"
+		# Return LED path
+		echo "${base}${led}"
+
+	elif [ -e "/sys/class/leds/skylink:dg:power:blue" ]; then
+		base="/sys/class/leds/skylink:dg:power:"
+		case $led in
+			1)
+				led=blue
+				;;
+			2)
+				led=green
+				;;
+			3)
+				led=red
+				;;
+		esac
+
+		echo "${base}${led}"
+
+	else
+		echo "Unable to locate LEDs"
+		exit 1
+	fi
 }
 
 # Set some LED param
@@ -31,7 +61,8 @@ show_usage() {
 # $2 = Param
 # $3 = value
 set_param() {
-	echo $3 > "${BASE}$1/$2"
+	base_path=$(led_path $1)
+	echo $3 > "${base_path}/$2"
 }
 
 # Flash
