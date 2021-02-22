@@ -34,8 +34,8 @@ led_path() {
 		# Return LED path
 		echo "${base}${led}"
 
-	elif [ -e "/sys/class/leds/skylink:dg:power:blue" ]; then
-		base="/sys/class/leds/skylink:dg:power:"
+	elif [ -e "/sys/class/leds/skylink:dg:pwr:blue" ]; then
+		base="/sys/class/leds/skylink:dg:pwr:"
 		case $led in
 			1)
 				led=blue
