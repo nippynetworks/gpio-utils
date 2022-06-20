@@ -29,7 +29,7 @@ led_path() {
 
 	local pce_base=$(ls -1d /sys/class/leds/apu*:green:led1 /sys/class/leds/alix:1 2> /dev/null |head -n 1)
 	local base
-	if [ -n "${pcebase}" ]; then
+	if [ -n "${pce_base}" ]; then
 		base="${pce_base%1}"
 		# Return LED path
 		echo "${base}${led}"
