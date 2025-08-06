@@ -27,7 +27,7 @@ show_usage() {
 led_path() {
 	led=$1
 
-	local pce_base=$(ls -1d /sys/class/leds/apu*:green:led1 /sys/class/leds/alix:1 2> /dev/null |head -n 1)
+	local pce_base=$(ls -1d /sys/class/leds/apu*:green:led1 /sys/class/leds/alix:1 /sys/class/leds/replicator:1 2> /dev/null | head -n 1)
 	local base
 	if [ -n "${pce_base}" ]; then
 		base="${pce_base%1}"
